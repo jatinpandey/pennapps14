@@ -1,0 +1,24 @@
+
+body {
+    margin: 0px 40px;
+    height: 100%;
+}
+
+#container {
+	min-height: 100%;
+	position: relative;
+}
+
+#content {
+	padding: 10px;
+	padding-bottom: 30px;
+}
+
+#footer {
+	height: 30px;
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	background: #ddd;
+	text-align: center;
+}
