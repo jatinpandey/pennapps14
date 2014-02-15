@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for
 from pymongo import Connection
-from googlemaps import GoogleMaps
-from pygeocoder import Geocoder
+#from googlemaps import GoogleMaps
+#from pygeocoder import Geocoder
 import requests
 import json
 import oauth2
