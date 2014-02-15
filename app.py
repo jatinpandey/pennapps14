@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for
 from pymongo import Connection
 from googlemaps import GoogleMaps
+import flickr
 #from pygeocoder import Geocoder
 import random
 import requests
@@ -32,6 +33,7 @@ matches: {"id":{"restaurant_id":list}}
 
 @app.route('/')
 def main():
+	db['restaurants'].remove({})
 	hello = "helloworld"
 	return render_template('index.html', hello=hello)
 
@@ -60,12 +62,51 @@ def explore(user_id):
 	# 	if dist_in_miles > dist:
 	# 		suggestions.remove(rest)
 
-	print "Printing suggestions for user " + str(user_id)
+	photos = []
+	first_rest_name = ""
+	first_rest_pic = ""
+	photo_URL_array = {}
+	is_first = 1 #1 = true, 0 = false
+	final_suggestions = []
 	for s in suggestions:
-		print s
+		if s['name'] not in user['seen']:
+			final_suggestions.append(s)
 
+	print "Printing suggestions for user " + str(user_id)
+	for s in final_suggestions:
+		user['seen'].append(s['name'])
+		if(is_first == 1):
+			# iti s the firsto ne!!!
+			first_rest_name = s['name']
+			f_food = s['cuisine'][0][0] + " food"
+			f_photo = flickr.photos_search(tags=f_food,per_page=1)
+			for p in f_photo:
+				first_rest_pic = p.getURL(size="Medium",urlType="source")
+				if first_rest_pic != "":
+					is_first = 0
+				else:
+					is_first = 1
+		else:
+
+			s_name = s['name']
+			print s_name
+			s_food = s['cuisine'][0][0] + " food"
+			print s_food
+			photo = flickr.photos_search(tags=s_food,per_page=1)
+
+			for p in photo:
+				photo_URL = p.getURL(size="Medium",urlType="source")
+				if photo_URL != "":
+					print photo_URL
+					photo_URL_array[s_name] = photo_URL
+
+
+	for key,value in photo_URL_array.items():
+		print "key is " + key + " value is " + value
+
+	users.save(user)
 	## To-do: pass values from database to template
-	return render_template('explore.html')
+	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic)
 
 # Purely for testing the explore ui
 @app.route('/exploretest')
@@ -87,9 +128,13 @@ def add_to_db(results, restaurants):
 		hit = restaurants.find({'name' : {"$exists" : True, "$in" : [r_name]}})
 		# This means this restaurant is in the DB
 		if hit.count() != 0:
+			print hit.count()
 			continue
 		else:
-			new_entry = {"id": gen_rand_string(), "name":r_name, "cuisine":result[1], "pics":"", "address":result[3], "city":result[4], "phone":result[2], "users":[]}
+			new_entry = {"id": gen_rand_string(), "name":r_name, "cuisine":result[5], "pics":"", "address":result[3], "city":result[4], "phone":result[2], "users":[]}
+			print "##############"
+			print result[5]
+			print "##############"
 			restaurants.insert(new_entry)
 
 def query_yelp(zipcode):
@@ -160,7 +205,7 @@ def gen_rand_string():
 def loginpage():
 	print url_for('static', filename='login.css')
 	return render_template('login.html')
-	
+
 if __name__ == "__main__":
 	app.debug = True
 	app.run()
