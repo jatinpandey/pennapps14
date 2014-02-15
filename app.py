@@ -1,16 +1,18 @@
 from flask import Flask, render_template, request, url_for
 from pymongo import Connection
-#from googlemaps import GoogleMaps
-#from pygeocoder import Geocoder
+from googlemaps import GoogleMaps
+from pygeocoder import Geocoder
+import random
 import requests
 import json
 import oauth2
 import urllib
 import urllib2
+import string
 
 app = Flask(__name__)
 connection = Connection('localhost', 27017) # Will want to change this to real server later on
-db = connection['database']
+db = connection['test-database']
 
 """
 IMPORTANT: this is what the schemas for each collection (table) in the database will look like
@@ -19,7 +21,7 @@ users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc
 
 	# Matches is a list of events
 
-restaurants: {"id":str, "name":str, "cuisine":list, "pics":str, "address":str, "city":str, "phone":str, "users":list}
+restaurants: {"id":str, "name":str, "cuisine":list, "pic_url":str, "address":str, "city":str, "phone":str, "users":list}
 	# Users is a list of user docs who like the restaurant
 
 events: {"id":str, "users":list, "restaurant":list} # Add datetime at some point
@@ -34,7 +36,7 @@ def main():
 	return render_template('index.html', hello=hello)
 
 @app.route('/explore/<user_id>')
-def explore():
+def explore(user_id):
 	users = db['users']
 	restaurants = db['restaurants']
 	user = users.find({'id': user_id})[0]
@@ -49,13 +51,18 @@ def explore():
 
 	# Find restaurants in user's city, then filter by distance based on user's location
 	suggestions = restaurants.find({"city":city})
-	cur_user_address = Geocoder.reverse_geocode(user_coords[0], user_coords[1])
-	for rest in suggestions:
-		rest_ad = rest['address']
-		dist_in_meters = GoogleMaps.directions(cur_user_address, rest_ad)['Directions']['Distance']['meters']
-		dist_in_miles = 1.609*(float(dist_in_meters) / 1000.0) 
-		if dist_in_miles > dist:
-			suggestions.remove(rest)
+	# print user_coords
+	# cur_user_address = Geocoder.reverse_geocode(user_coords[0], user_coords[1])
+	# for rest in suggestions:
+	# 	rest_ad = rest['address']
+	# 	dist_in_meters = GoogleMaps.directions(cur_user_address, rest_ad)['Directions']['Distance']['meters']
+	# 	dist_in_miles = 1.609*(float(dist_in_meters) / 1000.0) 
+	# 	if dist_in_miles > dist:
+	# 		suggestions.remove(rest)
+
+	print "Printing suggestions for user " + str(user_id)
+	for s in suggestions:
+		print s
 
 	## To-do: pass values from database to template
 	return render_template('explore.html')
@@ -65,12 +72,6 @@ def explore():
 def exploretest():
 	print url_for('static', filename='explore.css')
 	return render_template('explore.html')
-	
-# Purely for testing the explore ui
-@app.route('/login')
-def loginpage():
-	print url_for('static', filename='login.css')
-	return render_template('login.html')
 
 @app.route('/matches/<user_id>')
 def matches():
@@ -82,7 +83,6 @@ def matches():
 # Add results from Yelp which aren't in the database to the DB
 def add_to_db(results, restaurants):
 	for result in results:
-		(r_name, r_url, r_phone, r_address, r_city, r_categories)
 		r_name = result[0]
 		hit = restaurants.find({'name' : {"$exists" : True, "$in" : [r_name]}})
 		# This means this restaurant is in the DB
@@ -99,7 +99,7 @@ def query_yelp(zipcode):
 	token_secret = "AaIfeW__93y2k1_aVQH0ESUxV6U"
 
 	url_term = "food" # Generic search for food
-	url = "http://api.yelp.com/v2/search?" + "term=" +  url_term + "&" + "location=" + zipcode
+	url = "http://api.yelp.com/v2/search?" + "term=" +  url_term + "&" + "location=" + str(zipcode)
 
 	# Signing the url
 	consumer = oauth2.Consumer(consumer_key,consumer_secret)
@@ -128,12 +128,26 @@ def query_yelp(zipcode):
 	result_list = []
 	for i in range(len(response['businesses'])):
 		bus = response['businesses'][i]
-		r_name = bus['name']
-		r_url = bus['url']
-		r_phone = bus['display_phone']
-		r_address = bus['location']
-		r_city = r_address['city']
-		r_categories = bus['categories']
+		r_name = ""
+		r_url = ""
+		r_phone = ""
+		r_address = ""
+		r_city = ""
+		r_categories = ""
+
+		if 'name' in bus:
+			r_name = bus['name']
+		if 'url' in bus:
+			r_url = bus['url']
+		if 'display_phone' in bus:
+			r_phone = bus['display_phone']
+		if 'location' in bus:
+			r_address = bus['location']
+		if 'city' in r_address:
+			r_city = r_address['city']
+		if 'categories' in bus:
+			r_categories = bus['categories']
+
 		result_list.append((r_name, r_url, r_phone, r_address, r_city, r_categories))
 
 	return result_list
@@ -141,9 +155,24 @@ def query_yelp(zipcode):
 def gen_rand_string():
 	return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
 
+# Purely for testing the explore ui
+@app.route('/login')
+def loginpage():
+	print url_for('static', filename='login.css')
+	return render_template('login.html')
+	
 if __name__ == "__main__":
 	app.debug = True
 	app.run()
 
 
+"""
+To query mongo: the database is called db
+There are three collections (tables): users, restaurants, events
+You access them as db[collection_name] e.g. db["users"]
+To iterate through a collection, just say:
+for thing in collection.find():
+	and then, to get attributes, say thing[attribute], e.g. thing["cuisine"] if it's the restaurant collection
+
+"""
 
