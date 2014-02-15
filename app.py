@@ -10,39 +10,47 @@ db = connection['database']
 """
 IMPORTANT: this is what the schemas for each collection (table) in the database will look like
 
-users: {"user_id":int, "firstname":str, "lastname":str, "age":int, "sex":boolean, "loc":list of length 2 - (x, y) coords}
+users: {"id":str, "name":str, "age":int, "gender":str, "loc":list, "radius":int, "matches":list} 
 
-restaurants: {"rest_id":int, "name":str, "type":str, "pics":list of str (file paths), "loc":list of length 2 - (x, y) coords, "phone":int, "address":str, "users":list of user IDs (of users who have liked this restaurant)}
+	# Matches is a list of events
 
-groups: {"event_id": int, "users": list of user IDs who will be participating in this meal, "restaurant":str, "address":str, "loc": (x,y) coordinates}
+restaurants: {"id":str, "name":str, "cuisine":str, "pics":str, "address":str, "phone":str, "loc":list, "users":list}
+
+	# String which is value of dir is directory where the pictures ares
+	# Users is a list of user docs who like the restaurant
+
+events: {"id":str, "users":list, "restaurant":list, "time":datetime}
+
+matches: {"id":{"restaurant_id":list}}
+
 """
-
-
 
 @app.route('/')
 def main():
 	hello = "helloworld"
 	return render_template('index.html', hello=hello)
 
-@app.route('/explore')
-def explore(userid):
+@app.route('/explore/<user_id>')
+def explore():
 	users = db['user']
 	restaurants = db['restaurants']
-	user = users.find({'user_id': userid})[0]
-	user_coords = user['coords'] # Assume this is list of length 2
-	dist = user['dist']
+	user = users.find({'id': user_id})[0]
+	user_coords = user['loc']
+	dist = user['radius']
+	# In addition to this, we need to call the Yelp API here to make sure we add anything we don't already have in our database
 	suggestions = restaurants.find({"loc": {"$within": {"$center": [user_coords, dist]}}})
-
+	## To-do: add Mongo values to the template
 	return render_template('explore.html')
 
-@app.route('/matches')
+@app.route('/matches/<user_id>')
 def matches():
-	#MONGO: project[palcename, numvotes](results)
+	users = db['users']
+	user_matches = users.find({'user_id':user_id})[0]['matches']
 
 	return render_template('matches.html')
 
 if __name__ == "__main__":
-	app.debug=True
+	app.debug = True
 	app.run()
 
 
