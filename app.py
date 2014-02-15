@@ -70,7 +70,7 @@ def exploretest():
 @app.route('/matches/<user_id>')
 def matches():
 	# Returns event IDs in which user has been groped
-	user_matches = events.find({'id' : {$exists: user_id, $in : 'users'}})
+	user_matches = events.find({'users' : {"$in" : [user_id]}})
 
 	return render_template('matches.html')
 
@@ -79,7 +79,7 @@ def add_to_db(results, restaurants):
 	for result in results:
 		(r_name, r_url, r_phone, r_address, r_city, r_categories)
 		r_name = result[0]
-		hit = restaurants.find({'name' : {$exists : True, $in : [r_name]}})
+		hit = restaurants.find({'name' : {"$exists" : True, "$in" : [r_name]}})
 		# This means this restaurant is in the DB
 		if hit.count() != 0:
 			continue
