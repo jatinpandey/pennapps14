@@ -8,15 +8,14 @@
 
 {% block content %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/explore.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	<h1>Explore food and stuff</h1>
 	<p>This page shows your matches. We pull using Mongo!</p>
 	<!--  Carousel - consult the Twitter Bootstrap docs at 
 		      http://twitter.github.com/bootstrap/javascript.html#carousel -->
 		<div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
 		  <div class="carousel-inner">
+			 
 		    <div class="item active"><!-- class of active since it's the first item -->
 				<!-- this will be a loop of places and pics -->
 		      <img src="http://static2.businessinsider.com/image/51f03f966bb3f73c7700000b/19-fast-food-hacks-that-will-change-the-way-you-order.jpg" alt="" />
@@ -43,18 +42,16 @@
 		      </div>
 		    </div>
 		  </div><!-- /.carousel-inner -->
+		 
   <!--  Next and Previous controls below
         href values must reference the id for this carousel -->
     <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo; Not today</a>
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">Sounds good &rsaquo;</a>
 </div><!-- /.carousel -->
-
-
-<script>
-	  $(document).ready(function(){
+<script>$(document).ready(function(){
 		$('.carousel').carousel();
-	  });
-</script>
+	  });</script>
 
 {% endblock content %}
+
 
