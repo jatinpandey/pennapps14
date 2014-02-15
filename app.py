@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for
 from pymongo import Connection
 from googlemaps import GoogleMaps
-#from pygeocoder import Geocoder
+from pygeocoder import Geocoder
 import random
 import requests
 import json
@@ -17,7 +17,7 @@ db = connection['test-database']
 """
 IMPORTANT: this is what the schemas for each collection (table) in the database will look like
 
-users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc":list, "radius":int, "matches":list} 
+users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc":list, "radius":int, "matches":list, "seen":set} 
 
 	# Matches is a list of events
 
@@ -60,9 +60,15 @@ def explore(user_id):
 	# 	if dist_in_miles > dist:
 	# 		suggestions.remove(rest)
 
+	for s in suggestions:
+		if s['id'] in user['seen']:
+			suggestions.remove(s)
+
 	print "Printing suggestions for user " + str(user_id)
 	for s in suggestions:
+		user['seen'].add(s['id'])
 		print s
+
 
 	## To-do: pass values from database to template
 	return render_template('explore.html')
