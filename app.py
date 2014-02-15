@@ -65,6 +65,12 @@ def explore():
 def exploretest():
 	print url_for('static', filename='explore.css')
 	return render_template('explore.html')
+	
+# Purely for testing the explore ui
+@app.route('/login')
+def loginpage():
+	print url_for('static', filename='login.css')
+	return render_template('login.html')
 
 @app.route('/matches/<user_id>')
 def matches():
