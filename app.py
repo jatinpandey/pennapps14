@@ -4,7 +4,7 @@ from pymongo import Connection
 #from pygeocoder import Geocoder
 import requests
 import json
-#import oauth2
+import oauth2
 import urllib
 import urllib2
 
