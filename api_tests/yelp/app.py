@@ -14,12 +14,7 @@ def main():
 	token = "7Xpo8fE5MPDYbZnao0xf8KS5szH4hduz"
 	token_secret = "AaIfeW__93y2k1_aVQH0ESUxV6U"
 
-	url_term = "pizza"
 	url_location = "New+Jersey"
-
-	#url = "http://api.yelp.com/v2/search?term=cream+puffs&location=San+Francisco" 
-	#url = "http://api.yelp.com/v2/search?term=food&bounds=37.900000,-122.500000|37.788022,-122.399797&limit=3"
-
 	url_bounds = "37.900000,-122.500000|37.788022,-122.399797&limit=3"
 	url_term = "food"
 	url = "http://api.yelp.com/v2/search?" + "term=" +  url_term + "&" + "bounds=" + url_bounds
@@ -35,7 +30,7 @@ def main():
 	token = oauth2.Token(token, token_secret)
 	oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
 	signed_url = oauth_request.to_url()
-	print 'Signed URL: %s\n' % (signed_url,)
+	# print 'Signed URL: %s\n' % (signed_url,)
 
 # Connect
 	try:
@@ -52,7 +47,7 @@ def main():
 	restaurant_url = response['businesses'][0]['url']
 	restaurant_phone = response['businesses'][0]['display_phone']
 	restaurant_address = response['businesses'][0]['location']
-	print restaurant_address #it works
+	#print restaurant_address # it works
 	restaurant_categories = response['businesses'][0]['categories']
 
 
