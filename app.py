@@ -20,8 +20,6 @@ users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc
 	# Matches is a list of events
 
 restaurants: {"id":str, "name":str, "cuisine":list, "pics":str, "address":str, "city":str, "phone":str, "users":list}
-
-	# String which is value of dir is directory where the pictures ares
 	# Users is a list of user docs who like the restaurant
 
 events: {"id":str, "users":list, "restaurant":list} # Add datetime at some point
@@ -59,7 +57,7 @@ def explore():
 		if dist_in_miles > dist:
 			suggestions.remove(rest)
 
-	## To-do: pass values from database to emplate
+	## To-do: pass values from database to template
 	return render_template('explore.html')
 
 # Purely for testing the explore ui
@@ -69,7 +67,7 @@ def exploretest():
 
 @app.route('/matches/<user_id>')
 def matches():
-	# Returns event IDs in which user has been groped
+	# Returns event IDs in which user has been grouped
 	user_matches = events.find({'users' : {"$in" : [user_id]}})
 
 	return render_template('matches.html')
