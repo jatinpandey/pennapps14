@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 from pymongo import Connection
-from googlemaps import GoogleMaps
-from pygeocoder import Geocoder
+#from googlemaps import GoogleMaps
+#from pygeocoder import Geocoder
 import requests
 import json
 import oauth2
@@ -63,6 +63,7 @@ def explore():
 # Purely for testing the explore ui
 @app.route('/exploretest')
 def exploretest():
+	print url_for('static', filename='explore.css')
 	return render_template('explore.html')
 
 @app.route('/matches/<user_id>')
