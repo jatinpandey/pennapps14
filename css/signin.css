@@ -1,0 +1,30 @@
+@font-face
+{
+	font-family: accidental;
+	src: url(../fonts/AccidentalPresidency.ttf);
+	font-weight: bold;
+}
+
+.container {
+	width: 300px;
+	padding-bottom: 50px;
+	padding-top: 40px;	
+	border-radius: 15px;
+	background: linear-gradient(to bottom,#0099FF 0,#0099FF 35%,#0099FF 65%,#0099FF 100%);
+}
+.form-signin-heading {
+	
+}
+body {
+	padding-top: 20px;
+	background: #B2E0FF;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: "accidental";
+	font-size: 40px;
+}
+
+button {
+	background-color: #007ACC
+	
+}
