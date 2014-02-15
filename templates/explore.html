@@ -8,7 +8,7 @@
 
 {% block content %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/explore.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/signin.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
 
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 	<h1>Explore food and stuff</h1>
@@ -19,13 +19,13 @@
 		  <div class="carousel-inner">
 		    <div class="item active"><!-- class of active since it's the first item -->
 				<!-- this will be a loop of places and pics -->
-		      <img src="http://placehold.it/1200x480" alt="" />
+		      <img src="http://static2.businessinsider.com/image/51f03f966bb3f73c7700000b/19-fast-food-hacks-that-will-change-the-way-you-order.jpg" alt="" />
 		      <div class="carousel-caption">
 		        <p>Caption text here</p>
 		      </div>
 		    </div>
 		    <div class="item">
-		      <img src="http://placehold.it/1200x480" alt="" />
+		      <img src="http://vainlife.com/wp-content/uploads/2013/10/foods3.jpg" alt="" />
 		      <div class="carousel-caption">
 		        <p>Caption text here</p>
 		      </div>
@@ -49,16 +49,12 @@
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">Sounds good &rsaquo;</a>
 </div><!-- /.carousel -->
 
+
 <script>
-  $(document).ready(function(){
-    $('.carousel').carousel();
-  });
+	  $(document).ready(function(){
+		$('.carousel').carousel();
+	  });
 </script>
 
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.js"></script>
 {% endblock content %}
 

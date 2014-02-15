@@ -5,6 +5,19 @@
  */
 
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
+@font-face
+{
+	font-family: accidental;
+	src: url(../fonts/AccidentalPresidency.ttf);
+	font-weight: bold;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: "accidental";
+	font-size: 40px;
+}
+
+
+
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
