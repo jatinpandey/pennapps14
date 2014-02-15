@@ -3,18 +3,18 @@
 	padding-bottom: 50px;
 	padding-top: 40px;	
 	border-radius: 15px;
-	background: linear-gradient(to bottom,#0099FF 0,#0099FF 35%,#0099FF 65%,#0099FF 100%);
 }
+
 .form-signin-heading {
 	
 }
+
 body {
 	padding-top: 20px;
-	background: #B2E0FF;
+
 }
 
 
 button {
-	background-color: #007ACC
 	
 }

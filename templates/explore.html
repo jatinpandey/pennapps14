@@ -4,13 +4,12 @@
 
 {% block head %}
 	{{ super() }}
-	{% endblock head %}
+{% endblock head %}
 
 {% block content %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/explore.css') }}">
 
 	<h1>Explore food and stuff</h1>
-	<p>This page shows your matches. We pull using Mongo!</p>
 	<!--  Carousel - consult the Twitter Bootstrap docs at 
 		      http://twitter.github.com/bootstrap/javascript.html#carousel -->
 		<div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
@@ -20,25 +19,13 @@
 				<!-- this will be a loop of places and pics -->
 		      <img src="http://static2.businessinsider.com/image/51f03f966bb3f73c7700000b/19-fast-food-hacks-that-will-change-the-way-you-order.jpg" alt="" />
 		      <div class="carousel-caption">
-		        <p>Caption text here</p>
+		        <p></p>
 		      </div>
 		    </div>
 		    <div class="item">
 		      <img src="http://vainlife.com/wp-content/uploads/2013/10/foods3.jpg" alt="" />
 		      <div class="carousel-caption">
-		        <p>Caption text here</p>
-		      </div>
-		    </div>
-		    <div class="item">
-		      <img src="http://placehold.it/1200x480" alt="" />
-		      <div class="carousel-caption">
-		        <p>Caption text here</p>
-		      </div>
-		    </div>
-		    <div class="item">
-		      <img src="http://placehold.it/1200x480" alt="" />
-		      <div class="carousel-caption">
-		        <p>Caption text here</p>
+		        <p></p>
 		      </div>
 		    </div>
 		  </div><!-- /.carousel-inner -->
@@ -48,9 +35,11 @@
     <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo; Not today</a>
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">Sounds good &rsaquo;</a>
 </div><!-- /.carousel -->
-<script>$(document).ready(function(){
-		$('.carousel').carousel();
-	  });</script>
+<script>
+    $(document).ready(function(){
+        $('.carousel').carousel();
+	});
+</script>
 
 {% endblock content %}
 
