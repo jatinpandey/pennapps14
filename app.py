@@ -93,7 +93,6 @@ def explore(user_id):
 				else:
 					is_first = 1
 		else:
-
 			s_name = s['name']
 			print s_name
 			s_food = s['cuisine'][0][0] + " food"
