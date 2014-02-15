@@ -282,11 +282,11 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
       .on('mouseleave', $.proxy(this.cycle, this))
   }
 
-  Carousel.DEFAULTS = {
-    interval: 5000,
-    pause: 'hover',
-    wrap: true
-  }
+ // Carousel.DEFAULTS = {
+   // interval: 5000,
+    //pause: 'hover',
+    //wrap: true
+  //}
 
   Carousel.prototype.cycle =  function (e) {
     e || (this.paused = false)
@@ -331,6 +331,22 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 
     return this
   }
+  /*
+  document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '37') {
+        Carousel.prototype.prev()
+    }
+    else if (e.keyCode == '39') {
+        Carousel.prototype.next()
+    }
+}
+  */
+  
 
   Carousel.prototype.next = function () {
     if (this.sliding) return
