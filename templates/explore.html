@@ -17,6 +17,11 @@
  
 		    <div class="item active"><!-- class of active since it's the first item -->
 				<!-- this will be a loop of places and pics -->
+				{% if no_more  %}
+				<img src="{{ no_more }}" alt="" />
+				<p>no more suggestions</p>
+				{% endif %}
+				
 				<img src=" {{ first_rest_pic }} " alt="" />
 		      <div class="carousel-caption">
 				  <p> {{ first_rest_name }} </p>
@@ -39,7 +44,8 @@
     <a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo; Not today</a>
     <a class="carousel-control right" href="#this-carousel-id" data-slide="next">Sounds good &rsaquo;</a>
 </div><!-- /.carousel -->
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" > </script>
+<!--<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" > </script>-->
+<script src="/js/bootstrap.js"></script>
 <script>
     $(document).ready(function(){
         $('.carousel').carousel();

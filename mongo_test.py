@@ -25,7 +25,7 @@ gmaps = GoogleMaps()
 def create_users():
 	new_user1 = {"id":"1", "name":"Alen", "age":22, "gender":"male", "city":"Pittsburgh", "loc":[40.396258, -79.838659], "radius":20, "matches":[], "zip":15221, "seen":[]}
 	new_user2 = {"id":"2", "name":"Lara", "age":22, "gender":"female", "city":"Pittsburgh", "loc":[40.443866, -79.942042], "radius":15, "matches":[], "zip":15213, "seen":[]}
-	users.remove({})
+	#users.remove({})
 	users.insert(new_user1)
 	users.insert(new_user2)
 

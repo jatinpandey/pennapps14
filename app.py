@@ -18,7 +18,7 @@ db = connection['test-database']
 """
 IMPORTANT: this is what the schemas for each collection (table) in the database will look like
 
-users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc":list, "radius":int, "matches":list} 
+users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc":list, "radius":int, "matches":list, "seen":set} 
 
 	# Matches is a list of events
 
@@ -65,6 +65,7 @@ def explore(user_id):
 	photos = []
 	first_rest_name = ""
 	first_rest_pic = ""
+	no_more = None
 	photo_URL_array = {}
 	is_first = 1 #1 = true, 0 = false
 	final_suggestions = []
@@ -73,7 +74,12 @@ def explore(user_id):
 			final_suggestions.append(s)
 
 	print "Printing suggestions for user " + str(user_id)
+
+	if len(final_suggestions) == 0:
+		no_more = "/static/puppy.jpg"
+
 	for s in final_suggestions:
+		print "in for"
 		user['seen'].append(s['name'])
 		if(is_first == 1):
 			# iti s the firsto ne!!!
@@ -96,6 +102,7 @@ def explore(user_id):
 
 			for p in photo:
 				photo_URL = p.getURL(size="Medium",urlType="source")
+				print photo_URL
 				if photo_URL != "":
 					print photo_URL
 					photo_URL_array[s_name] = photo_URL
@@ -105,8 +112,9 @@ def explore(user_id):
 		print "key is " + key + " value is " + value
 
 	users.save(user)
+
 	## To-do: pass values from database to template
-	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic)
+	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
 
 # Purely for testing the explore ui
 @app.route('/exploretest')
