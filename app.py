@@ -42,6 +42,11 @@ def explore():
 	## To-do: add Mongo values to the template
 	return render_template('explore.html')
 
+#purely for testing the explore ui
+@app.route('/exploretest')
+def exploretest():
+	return render_template('explore.html')
+
 @app.route('/matches/<user_id>')
 def matches():
 	users = db['users']
