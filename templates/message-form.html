@@ -1,0 +1,15 @@
+
+{% extends "base.html" %}
+{% block title %}Invite friend to lunch{% endblock title %}
+
+{% block head %}
+	{{ super() }}
+{% endblock head %}
+
+{% block content %}
+	<form method="POST" action="/message">
+		<textarea name="message">We matched on FoodMuser! Would you like to go to {{ matched_event.restaurants }} this Friday at 8pm?</textarea><br>
+		<input type="hidden" name="to_user" value={{ to_user }} />
+		<input type="hidden" name="from_user" value= {{ from_user }} />
+		<button type="submit">Send message!</button>
+{% endblock content %}
