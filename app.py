@@ -86,7 +86,7 @@ def explore(user_id):
 		no_more = "/static/puppy.jpg"
 
 	for s in final_suggestions:
-		print "in for"
+		#print "in for"
 		# user['seen'].append(s['name'])
 		if(is_first == 1):
 			# iti s the firsto ne!!!
@@ -101,16 +101,16 @@ def explore(user_id):
 					is_first = 1
 		else:
 			s_name = s['name']
-			print s_name
+			#print s_name
 			s_food = s['cuisine'][0][0] + " food"
-			print s_food
+			#print s_food
 			photo = flickr.photos_search(tags=s_food,per_page=1)
 
 			for p in photo:
 				photo_URL = p.getURL(size="Medium",urlType="source")
-				print photo_URL
+				#print photo_URL
 				if photo_URL != "":
-					print photo_URL
+					#print photo_URL
 					photo_URL_array[s_name] = photo_URL
 
 
@@ -120,12 +120,12 @@ def explore(user_id):
 	users.save(user)
 
 	## To-do: pass values from database to template
-	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, matches = matches, seen = None)
+	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, seen = None, user = user, restaurants = restaurants)
 
 # Purely for testing the explore ui
 @app.route('/exploretest')
 def exploretest():
-	return render_template('explore.html',photo_URL_array={})
+	return render_template('explore.html',photo_URL_array={}, matches={}, restaurants={})
 
 @app.route('/matches/<user_id>')
 def matches(user_id):
@@ -260,13 +260,13 @@ def gen_rand_string():
 # Purely for testing the explore ui
 @app.route('/login')
 def loginpage():
-	users = db['users']
-	restaurants = db['restaurants']
-	user = users.find({'id': user_id})[0]
-	if (pwd != ""):
-		return redirect_internal('matches.html', user_id)
-	else:
-		return render_template('login.html', user_id, pwd)
+	# users = db['users']
+	# restaurants = db['restaurants']
+	# user = users.find({'id': user_id})[0]
+	# if (pwd != ""):
+	# 	return redirect_internal('matches.html', user_id)
+	# else:
+	return render_template('login.html', user_id=None, pwd=None)
 
 def try_to_add_user(username, gender, name, city, age):
 	hit = db['users'].find({'id': {"$exists" : True, "$in" : [username]}})
