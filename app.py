@@ -119,7 +119,7 @@ def explore(user_id):
 @app.route('/exploretest')
 def exploretest():
 	print url_for('static', filename='explore.css')
-	return render_template('explore.html')
+	return render_template('explore.html',photo_URL_array={})
 
 @app.route('/matches/<user_id>')
 def matches():
