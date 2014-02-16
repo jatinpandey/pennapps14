@@ -46,6 +46,8 @@ def explore(user_id):
 	dist = user['radius']
 	zipcode = user['zip']
 	city = user['city']
+	matches = user['matches']
+	seen = user['seen']
 
 	# We need to call the Yelp API here to make sure we add anything we don't already have in our database - for now we'll just search by ZIP code
 	results = query_yelp(zipcode)
@@ -113,7 +115,7 @@ def explore(user_id):
 	users.save(user)
 
 	## To-do: pass values from database to template
-	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, user_id = user_id)
+	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, matches = matches, seen = seen)
 
 # Purely for testing the explore ui
 @app.route('/exploretest')
