@@ -2,9 +2,10 @@ from pymongo import Connection
 import json
 import random
 import string
+import sys
 
 connection = Connection('localhost', 27017) # Will want to change this to real server later on
-db = connection['database']
+db = connection['test-database']
 
 
 """
@@ -28,7 +29,8 @@ def main():
 	restaurants = db['restaurants'].find()
 	events = db['events']
 	users_matched = set()
-	for r in restaurant:
+	for r in restaurants:
+		print r['name']
 		users = r['users']
 		# This loop ensures that a user isn't matched to two different events
 		for uid in users:
@@ -38,9 +40,10 @@ def main():
 		if len(users) > 1:
 			# This generates a random event id - very unlikely duplicates will occur - can modify later
 			event_id = gen_rand_string()
-			events.insert({"id:"event_id, "users":users, "restaurant":r})
+			events.insert({"id":event_id, "users":users, "restaurant":r})
 			for u in users:
 				users_matched.add(u)
+	print "HELLO"
 	return 0
 
 def gen_rand_string():
@@ -48,3 +51,4 @@ def gen_rand_string():
 
 if __name__ == "__main__":
 	main()
+	print sys.stdout.isatty()
