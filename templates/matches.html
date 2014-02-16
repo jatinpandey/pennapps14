@@ -10,12 +10,12 @@
 	<h1>You have matches at the following places!</h1>
 	<p>Hit a link below a restaurant you want to visit to set contact with like-tummied musers</p>
 	{% for match in event_matches %}
-		<div id="match">
+		<div class="match">
 			{{ match.restaurants }}<br>
 			<ul>
 				{% for user in match.users %}
 					{% if not user == user_id %}
-						<li>{{ user }}</li>
+						<li><a href="/message/664457128/668323316/1">{{ user }}</a></li>
 					{% endif %}
 				{% endfor %}
 			</ul>
@@ -23,4 +23,3 @@
 	{% endfor %}
 	
 {% endblock content %}
-

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect
 from pymongo import Connection
 from googlemaps import GoogleMaps
 import flickr
@@ -10,6 +10,7 @@ import oauth2
 import urllib
 import urllib2
 import string
+from twilio.rest import TwilioRestClient
 
 app = Flask(__name__)
 connection = Connection('localhost', 27017) # Will want to change this to real server later on
@@ -18,21 +19,26 @@ db = connection['test-database']
 """
 IMPORTANT: this is what the schemas for each collection (table) in the database will look like
 
-users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc":list, "radius":int, "matches":list, "seen":set} 
+users: {"_id":str, "name":str, "age":int, "gender":str, "phone":str, "city":str, "zip":str, "loc":list, "radius":int, "matches":list, "seen":set} 
 
 	# Matches is a list of events
 
-restaurants: {"id":str, "name":str, "cuisine":list, "pic_url":str, "address":str, "city":str, "phone":str, "users":list}
+restaurants: {"_id":str, "name":str, "cuisine":list, "pic_url":str, "address":str, "city":str, "phone":str, "users":list}
 	# Users is a list of user docs who like the restaurant
 
-events: {"id":str, "users":list, "restaurant":list} # Add datetime at some point
+events: {"_id":str, "users":list, "restaurant":list} # Add datetime at some point
 
-matches: {"id":{"restaurant_id":list}}
+matches: {"_id":{"restaurant_id":list}}
 
 """
 
 @app.route('/')
 def main():
+	db['users'].remove()
+	j_user = {"_id":'664457128', "name":'Jatin Pandey', "age":21, "phone":"12174199045", "gender":"Male", "city":"Philadelphia", "zip":"19104", "radius":10, "matches":[]}
+	a_user = {"_id":'668323316', "name":'Alen Lukic', "age":23, "phone":"12818892981", "gender":"Male", "city":"Philadelphia", "zip":"19104", "radius":10, "matches":[]}
+	db['users'].insert(j_user)
+	db['users'].insert(a_user)
 	db['restaurants'].remove({})
 	hello = "helloworld"
 	return render_template('index.html', hello=hello)
@@ -125,11 +131,11 @@ def exploretest():
 def matches(user_id):
 	# Returns event IDs in which user has been grouped
 
-	#db['events'].remove()
+	db['events'].remove()
 
-	new_event = {'_id': '1', 'users': ['1', '2', '3'], 'restaurants': 'Olive Garden'}
+	new_event = {'_id': '1', 'users': ['136455336', '556477647', '341887352', '664457128', '668323316'], 'restaurants': 'Olive Garden'}
 	db['events'].insert(new_event)
-	new_event = {'_id': '2', 'users': ['1', '2'], 'restaurants': 'Pizza Hut'}
+	new_event = {'_id': '2', 'users': ['136455336', '299874563', '556477647', '664457128', '668323316'], 'restaurants': 'Pizza Hut'}
 	db['events'].insert(new_event)
 	event_matches = db['events'].find({'users' : {"$in" : [user_id]}})
 
@@ -150,10 +156,16 @@ def add_to_db(results, restaurants):
 			print result[5]
 			print "##############"
 			restaurants.insert(new_entry)
+
 # Connected to real money - USE SPARINGLY
-@app.route('/message/<to_user>/<from_user>/<message>')
-def send_message(to_user, from_user, message):
+@app.route('/message', methods=['POST'])
+def send_message():
        users = db['users']
+       to_user = request.form['to_user']
+       from_user = request.form['from_user']
+       message = request.form['message']
+       to_user_doc = db['users'].find({'_id': str(to_user)})[0]
+       from_user_doc = db['users'].find({'_id': str(from_user)})[0]
        # users.remove({})
        # new_user1 = {"_id":"1", "name":"Alen", "age":22, "gender":"male"
        # new_user2 = {"_id":"2", "name":"Rebecca", "age":21, "gender":"fe
@@ -168,13 +180,19 @@ def send_message(to_user, from_user, message):
        account_sid = "ACa8a22925ec5318ac215aac49235fd915" 
        auth_token  = "e4dadad9d82be6b82cf2b35432b430ed"
        client = TwilioRestClient(account_sid, auth_token)
-       to_user_doc = users.find({'id': str(to_user)})[0]
-       from_user_doc = users.find({'id': str(from_user)})[0]    
-       message = client.messages.create(body="Message from " + to_user_doc['name'],
-           to_=from_user_doc['phone'],
-           from_="+18326102106")
-       print message.sid
 
+       real_message = client.messages.create(body="Message from " + from_user_doc['name'] + " on FoodMuser: " + message,
+           to_=to_user_doc['phone'],
+           from_="+18326102106")
+       print real_message.sid
+       redirect_to = '/matches/' + str(from_user)
+       print real_message
+       return redirect(redirect_to)
+
+@app.route('/message/<to_user>/<from_user>/<event_id>')
+def message_form(to_user, from_user, event_id):
+	matched_event = db['events'].find({'_id': {"$in": [event_id]}})
+	return render_template('message-form.html', to_user=to_user, from_user=from_user, matched_event=matched_event)
 
 def query_yelp(zipcode):
 	consumer_key = "g3uCx1ffBEd1MnFcapxpAQ" 
@@ -266,6 +284,12 @@ def signuppage():
 	age = users['age']
 	try_to_add_user(user, gender, name, city, age)
 	return render_template('create.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
+
+@app.route('/printevents')
+def print_events():
+	for e in db['events'].find():
+		print e['id']
+	return render_template('index.html')
 
 if __name__ == "__main__":
 	app.debug = True
