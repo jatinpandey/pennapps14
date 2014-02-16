@@ -119,6 +119,8 @@ def explore(user_id):
 
 	users.save(user)
 
+	# db['temp'] = {"_id":1, "phURLArray":photo_URL_array, "fRestName":first_rest_name, "fRestPic":first_rest_pic, "nMore": no_more, "seen":None, "user":user, "re"}
+
 	## To-do: pass values from database to template
 	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, seen = None, user = user, restaurants = restaurants)
 
