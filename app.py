@@ -155,26 +155,18 @@ def add_to_db(results, restaurants):
 @app.route('/message/<to_user>/<from_user>/<message>')
 def send_message(to_user, from_user, message):
        users = db['users']
-       # users.remove({})
-       # new_user1 = {"_id":"1", "name":"Alen", "age":22, "gender":"male"
-       # new_user2 = {"_id":"2", "name":"Rebecca", "age":21, "gender":"fe
-       # new_user3 = {"_id":"3", "name":"Maya", "age":23, "gender":"femal
-       # new_user4 = {"_id":"4", "name":"Maya", "age":23, "gender":"femal
-       # users.insert(new_user1)
-       # users.insert(new_user2)
-       # users.insert(new_user3)
-       # users.insert(new_user4)
 
        # Your Account Sid and Auth Token from twilio.com/user/account
        account_sid = "ACa8a22925ec5318ac215aac49235fd915" 
        auth_token  = "e4dadad9d82be6b82cf2b35432b430ed"
        client = TwilioRestClient(account_sid, auth_token)
        to_user_doc = users.find({'id': str(to_user)})[0]
-       from_user_doc = users.find({'id': str(from_user)})[0]    
-       message = client.messages.create(body="Message from " + to_user_doc['name'],
+       from_user_doc = users.find({'id': str(from_user)})[0] 
+
+       real_message = client.messages.create(body="Message from " + to_user_doc['name'] + ": " + message,
            to_=from_user_doc['phone'],
            from_="+18326102106")
-       print message.sid
+       print real_message.sid
 
 
 def query_yelp(zipcode):
