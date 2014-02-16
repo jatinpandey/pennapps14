@@ -121,11 +121,16 @@ def exploretest():
 	return render_template('explore.html',photo_URL_array={})
 
 @app.route('/matches/<user_id>')
-def matches():
+def matches(user_id):
 	# Returns event IDs in which user has been grouped
-	user_matches = events.find({'users' : {"$in" : [user_id]}})
 
-	return render_template('matches.html')
+	new_event = {'id': '1', 'users': ['1', '2', '3'], 'restaurants': 'Olive Garden'}
+	db['events'].insert(new_event)
+	new_event = {'id': '2', 'users': ['1', '2'], 'restaurants': 'Pizza Hut'}
+	db['events'].insert(new_event)
+	event_matches = db['events'].find({'users' : {"$in" : [user_id]}})
+
+	return render_template('matches.html', event_matches=event_matches, user_id=user_id)
 
 # Add results from Yelp which aren't in the database to the DB
 def add_to_db(results, restaurants):

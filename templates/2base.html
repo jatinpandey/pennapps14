@@ -1,9 +1,10 @@
 
 <!DOCTYPE html>
 <html lang="en">
+<!--<script type="text/javascript" href="{{ url_for('static', filename='js/bootstrap.js') }}"></script>-->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" > </script>
-<!--<script type="text/javascript" href="{{ url_for('static', filename='js/bootstrap.js') }}"></script>-->
+
 
 
 <head>
@@ -17,13 +18,13 @@
 	<link href='http://fonts.googleapis.com/css?family=PT+Sans+Caption' rel='stylesheet' type='text/css'>
 
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-
-	<div id="banner"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo"></div>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
 </head>
 
-
 <body>
+	<div id="banner"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo" /></div>
+
 	<div id="container">
 		<div id="content">
 			{% block content %}
