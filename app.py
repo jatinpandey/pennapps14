@@ -149,6 +149,31 @@ def add_to_db(results, restaurants):
 			print result[5]
 			print "##############"
 			restaurants.insert(new_entry)
+# Connected to real money - USE SPARINGLY
+@app.route('/message/<to_user>/<from_user>/<message>')
+def send_message(to_user, from_user, message):
+       users = db['users']
+       # users.remove({})
+       # new_user1 = {"_id":"1", "name":"Alen", "age":22, "gender":"male"
+       # new_user2 = {"_id":"2", "name":"Rebecca", "age":21, "gender":"fe
+       # new_user3 = {"_id":"3", "name":"Maya", "age":23, "gender":"femal
+       # new_user4 = {"_id":"4", "name":"Maya", "age":23, "gender":"femal
+       # users.insert(new_user1)
+       # users.insert(new_user2)
+       # users.insert(new_user3)
+       # users.insert(new_user4)
+
+       # Your Account Sid and Auth Token from twilio.com/user/account
+       account_sid = "ACa8a22925ec5318ac215aac49235fd915" 
+       auth_token  = "e4dadad9d82be6b82cf2b35432b430ed"
+       client = TwilioRestClient(account_sid, auth_token)
+       to_user_doc = users.find({'id': str(to_user)})[0]
+       from_user_doc = users.find({'id': str(from_user)})[0]    
+       message = client.messages.create(body="Message from " + to_user_doc['name'],
+           to_=from_user_doc['phone'],
+           from_="+18326102106")
+       print message.sid
+
 
 def query_yelp(zipcode):
 	consumer_key = "g3uCx1ffBEd1MnFcapxpAQ" 
@@ -241,23 +266,7 @@ def signuppage():
 	try_to_add_user(user, gender, name, city, age)
 	return render_template('create.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
 
-	
-	
-	
-	
-
 if __name__ == "__main__":
 	app.debug = True
 	app.run()
-
-
-"""
-To query mongo: the database is called db
-There are three collections (tables): users, restaurants, events
-You access them as db[collection_name] e.g. db["users"]
-To iterate through a collection, just say:
-for thing in collection.find():
-	and then, to get attributes, say thing[attribute], e.g. thing["cuisine"] if it's the restaurant collection
-
-"""
 
