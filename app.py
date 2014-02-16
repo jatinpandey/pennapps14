@@ -118,7 +118,6 @@ def explore(user_id):
 # Purely for testing the explore ui
 @app.route('/exploretest')
 def exploretest():
-	print url_for('static', filename='explore.css')
 	return render_template('explore.html',photo_URL_array={})
 
 @app.route('/matches/<user_id>')
@@ -210,8 +209,35 @@ def gen_rand_string():
 # Purely for testing the explore ui
 @app.route('/login')
 def loginpage():
-	print url_for('static', filename='login.css')
-	return render_template('login.html')
+	users = db['users']
+	restaurants = db['restaurants']
+	user = users.find({'id': user_id})[0]
+	if (pwd != ""):
+		return redirect_internal('matches.html', user_id)
+	else:
+		return render_template('login.html', user_id, pwd)
+
+def try_to_add_user(username, gender, name, city, age):
+	hit = users.find({'id': {"$exists" : True, "$in" : [username]}})
+	if hit.count() == 0:
+		new_entry = {"id": username, "name":name, "age":age, "gender":gender, "city":city, "zip":"", "loc":{}, "radius":0, "matches":{}, "seen":{} }
+		users.insert(new_entry)	
+	
+@app.route('/signup')
+def signuppage():
+	users = db['users']
+	username = users['id']
+	city = users['city']
+	name = users['name']
+	gender = users['gender']
+	age = users['age']
+	try_to_add_user(user, gender, name, city, age)
+	return render_template('create.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
+
+	
+	
+	
+	
 
 if __name__ == "__main__":
 	app.debug = True
