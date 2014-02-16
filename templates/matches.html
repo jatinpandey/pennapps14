@@ -8,8 +8,18 @@
 
 {% block content %}
 	<h1>You have matches at the following places!</h1>
+	<p>Hit a link below a restaurant you want to visit to set contact with like-tummied musers</p>
 	{% for match in event_matches %}
-		{{ match.restaurant }}
+		<div id="match">
+			{{ match.restaurants }}<br>
+			<ul>
+				{% for user in match.users %}
+					{% if not user == user_id %}
+						<li>{{ user }}</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</match>
 	{% endfor %}
 	
 {% endblock content %}

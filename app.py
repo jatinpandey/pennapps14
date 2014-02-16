@@ -125,9 +125,11 @@ def exploretest():
 def matches(user_id):
 	# Returns event IDs in which user has been grouped
 
-	new_event = {'id': '1', 'users': ['1', '2', '3'], 'restaurants': 'Olive Garden'}
+	#db['events'].remove()
+
+	new_event = {'_id': '1', 'users': ['1', '2', '3'], 'restaurants': 'Olive Garden'}
 	db['events'].insert(new_event)
-	new_event = {'id': '2', 'users': ['1', '2'], 'restaurants': 'Pizza Hut'}
+	new_event = {'_id': '2', 'users': ['1', '2'], 'restaurants': 'Pizza Hut'}
 	db['events'].insert(new_event)
 	event_matches = db['events'].find({'users' : {"$in" : [user_id]}})
 
@@ -143,7 +145,7 @@ def add_to_db(results, restaurants):
 			print hit.count()
 			continue
 		else:
-			new_entry = {"id": gen_rand_string(), "name":r_name, "cuisine":result[5], "pics":"", "address":result[3], "city":result[4], "phone":result[2], "users":[]}
+			new_entry = {"_id": gen_rand_string(), "name":r_name, "cuisine":result[5], "pics":"", "address":result[3], "city":result[4], "phone":result[2], "users":[]}
 			print "##############"
 			print result[5]
 			print "##############"
