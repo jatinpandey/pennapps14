@@ -11,7 +11,11 @@
   font-weight: 400;
   src: local('PT Sans Caption'), local('PTSans-Caption'), url(http://themes.googleusercontent.com/static/fonts/ptsanscaption/v7/OXYTDOzBcXU8MTNBvBHeSQRW432DtwGNER78eOJ0i0s.woff) format('woff');
 }
-
+#banner {
+	height:80px;
+    background-color:#3276b1;
+    width:100%;
+}
 #footer {
 	font-size: 10px;
 }
@@ -2101,7 +2105,7 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #3276b1;
+  background-color: #FFB547;
   border-color: #285e8e;
 }
 .btn-primary:active,
