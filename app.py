@@ -286,6 +286,12 @@ def signuppage():
 	try_to_add_user(user, gender, name, city, age)
 	return render_template('create.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
 
+@app.route('/printevents')
+def print_events():
+	for e in db['events'].find():
+		print e['id']
+	return render_template('index.html')
+
 if __name__ == "__main__":
 	app.debug = True
 	app.run()

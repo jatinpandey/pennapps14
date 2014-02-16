@@ -81,3 +81,4 @@ if __name__ == "__main__":
 	db['restaurants'].remove({})
 	create_users()
 	create_rests()
+	get_suggestions()
