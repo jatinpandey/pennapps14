@@ -113,7 +113,7 @@ def explore(user_id):
 	users.save(user)
 
 	## To-do: pass values from database to template
-	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
+	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, user_id = user_id)
 
 # Purely for testing the explore ui
 @app.route('/exploretest')
