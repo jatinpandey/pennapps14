@@ -75,8 +75,29 @@
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
-      console.log('Good to see you, ' + response.name + '.');
-    });
+		
+		if (response && !response.error) {
+			//get information here
+			//logged in --> redirect
+			//users: {"id":str, "name":str, "age":int, "gender":str, "city":str, zip":str, loc":list, "radius":int, "matches":list, "seen":set}
+			//me?fields=id,name,work,age_range,address,education,gender,location,email
+			 </script> 
+			user['id'] = response.userID;
+			user['gender'] = response.gender;
+			user['name'] = response.name;
+			<script>
+			if (response.location)
+			{</script>
+				user['city'] = response.location.name
+			<script>}
+			//education.year
+			//education.school
+			//work.end_date
+			//work.location
+      }
+      
+    },{scope: 'email,user_location, user_work_history, user_education_history'});
+
   }
 </script>
 
