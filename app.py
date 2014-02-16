@@ -34,7 +34,7 @@ matches: {"_id":{"restaurant_id":list}}
 
 @app.route('/')
 def main():
-	db['users'].remove()
+	db['users'].remove({})
 	j_user = {"_id":'664457128', "name":'Jatin Pandey', "age":21, "phone":"12174199045", "gender":"Male", "city":"Philadelphia", "zip":"19104", "radius":10, "matches":[]}
 	a_user = {"_id":'668323316', "name":'Alen Lukic', "age":23, "phone":"12818892981", "gender":"Male", "city":"Philadelphia", "zip":"19104", "radius":10, "matches":[]}
 	db['users'].insert(j_user)
@@ -47,13 +47,12 @@ def main():
 def explore(user_id):
 	users = db['users']
 	restaurants = db['restaurants']
-	user = users.find({'id': user_id})[0]
-	user_coords = user['loc']
+	user = users.find({'_id': user_id})[0]
 	dist = user['radius']
 	zipcode = user['zip']
 	city = user['city']
 	matches = user['matches']
-	seen = user['seen']
+	#seen = user['seen']
 
 	# We need to call the Yelp API here to make sure we add anything we don't already have in our database - for now we'll just search by ZIP code
 	results = query_yelp(zipcode)
@@ -78,8 +77,8 @@ def explore(user_id):
 	is_first = 1 #1 = true, 0 = false
 	final_suggestions = []
 	for s in suggestions:
-		if s['name'] not in user['seen']:
-			final_suggestions.append(s)
+	 	# if s['name'] not in user['seen']:
+		final_suggestions.append(s)
 
 	print "Printing suggestions for user " + str(user_id)
 
@@ -88,7 +87,7 @@ def explore(user_id):
 
 	for s in final_suggestions:
 		print "in for"
-		user['seen'].append(s['name'])
+		# user['seen'].append(s['name'])
 		if(is_first == 1):
 			# iti s the firsto ne!!!
 			first_rest_name = s['name']
@@ -121,7 +120,7 @@ def explore(user_id):
 	users.save(user)
 
 	## To-do: pass values from database to template
-	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, matches = matches, seen = seen)
+	return render_template('explore.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more, matches = matches, seen = None)
 
 # Purely for testing the explore ui
 @app.route('/exploretest')
@@ -270,7 +269,7 @@ def loginpage():
 		return render_template('login.html', user_id, pwd)
 
 def try_to_add_user(username, gender, name, city, age):
-	hit = users.find({'id': {"$exists" : True, "$in" : [username]}})
+	hit = db['users'].find({'id': {"$exists" : True, "$in" : [username]}})
 	if hit.count() == 0:
 		new_entry = {"id": username, "name":name, "age":age, "gender":gender, "city":city, "zip":"", "loc":{}, "radius":0, "matches":{}, "seen":{} }
 		users.insert(new_entry)	
@@ -283,7 +282,7 @@ def signuppage():
 	name = users['name']
 	gender = users['gender']
 	age = users['age']
-	try_to_add_user(user, gender, name, city, age)
+	try_to_add_user(username, gender, name, city, age)
 	return render_template('create.html',photo_URL_array = photo_URL_array,first_rest_name = first_rest_name, first_rest_pic = first_rest_pic, no_more = no_more)
 
 @app.route('/printevents')
