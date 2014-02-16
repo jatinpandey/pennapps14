@@ -49,12 +49,19 @@
     $(document).ready(function(){
         $('.carousel').carousel();
 	});
-	$('.carousel-control right").click(function(e) {
-		//add it to user matches
-		
+	$('.right').click(function(e) {
+		if ($('.item').hasClass('active'))
+		{
+			//add the user to the current restaurant's user list
+			{{restaurants.name.rest_name.users.append(user)}}
+		}
 	});
-	$('.carousel-control left").click(function(e) {
-		//add it to user seen
+	$('.left').click(function(e) {
+		if ($('.item').hasClass('active'))
+		{
+			//add current restaurant to user's seen list
+			{{user.seen.append(restaurants.name.rest_name)}}
+		}
 	});
 </script>
 
